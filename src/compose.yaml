@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:12.17
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: Pg123
+      POSTGRES_USER: kubenews
+      POSTGRES_DB: kubenews
+    volumes:
+      - postgres_vol:/var/lib/postgresql/data
+    networks:
+      - kube_news_net
+
+  kube_news:
+    image: ariadne1998/kube-news:v1
+    ports:
+      - 8080:8080
+    networks:
+      - kube_news_net
+    environment:
+      DB_PASSWORD: Pg123
+      DB_USERNAME: kubenews
+      DB_DATABASE: kubenews
+      DB_HOST: postgres
+
+volumes:
+  postgres_vol:
+    name: postgre_vol
+    #external: true # mapeia um volume anteriormente criado externamente ao Docker Compose. 
+      
+networks:
+  kube_news_net:
+    name: knews_net
+    driver: bridge
