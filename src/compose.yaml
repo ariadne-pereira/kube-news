@@ -13,11 +13,16 @@ services:
       - kube_news_net
 
   kube_news:
-    image: ariadne1998/kube-news:v1
+    image: ariadne1998/kube-news:${KUBE_NEWS_TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 8080:8080
     networks:
       - kube_news_net
+    depends_on:
+      - postgres
     environment:
       DB_PASSWORD: Pg123
       DB_USERNAME: kubenews
